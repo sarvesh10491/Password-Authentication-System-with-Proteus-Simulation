@@ -1,0 +1,92 @@
+#include <reg52.h> 
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <string.h>
+#include <lcd.h>
+
+sbit C1=P1^0;
+sbit C2=P1^1;
+sbit C3=P1^2;
+sbit R1=P1^3;
+sbit R2=P1^4;
+sbit R3=P1^5;
+sbit R4=P1^6;
+
+char read_keypad();
+
+unsigned char keydata;
+unsigned int var;
+unsigned char c,p;
+
+void main(void)
+{
+lcd_init();
+MSDelay(1);
+while(1)
+{
+  var=0;
+  lcd_init();
+  while(1)
+  {
+    /*lcd_goto(1,1);
+    lcd_strwrite("Keys Pressed:");
+    lcd_goto(1,2);
+    lcd_strwrite("Times:");*/
+    while(!(c = read_keypad()));
+    /*p=c;
+    while(p==c)
+    {
+      var++;
+      lcd_goto(14,1);*/
+      lcd_charwrite(c);
+      //lcd_goto(7,2);
+      //lcd_charwrite(var+48);
+      MSDelay(10);
+      //while(!(c = read_keypad()));
+    }
+    //var=0;
+    //lcd_clear();
+  }
+}
+//}
+
+char read_keypad()
+{
+  C1=1;
+  C2=1;
+  C3=1;
+
+  R1=0;
+  R2=1;
+  R3=1;
+  R4=1;
+  if(C1==0){MSDelay(100);while(C1==0);return '1';}
+  if(C2==0){MSDelay(100);while(C2==0);return '2';}
+  if(C3==0){MSDelay(100);while(C3==0);return '3';}
+
+  R1=1;
+  R2=0;
+  R3=1;
+  R4=1;
+  if(C1==0){MSDelay(100);while(C1==0);return '4';}
+  if(C2==0){MSDelay(100);while(C2==0);return '5';}
+  if(C3==0){MSDelay(100);while(C3==0);return '6';}
+
+  R1=1;
+  R2=1;
+  R3=0;
+  R4=1;
+  if(C1==0){MSDelay(100);while(C1==0);return '7';}
+  if(C2==0){MSDelay(100);while(C2==0);return '8';}
+  if(C3==0){MSDelay(100);while(C3==0);return '9';}
+
+  R1=1;
+  R2=1;
+  R3=1;
+  R4=0;
+  if(C1==0){MSDelay(100);while(C1==0);return '*';}
+  if(C2==0){MSDelay(100);while(C2==0);return '0';}
+  if(C3==0){MSDelay(100);while(C3==0);return '#';}
+
+  return 0;
+}
